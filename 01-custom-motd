@@ -32,11 +32,27 @@ done
 internal_ip=$(hostname -I | awk '{print $1}')
 external_ip=$(curl -s https://icanhazip.com)  # Replace with preferred external IP service
 
-# Print MOTD message
-echo "  Last Login: $(last | head -n 1)"
-echo "  Date & Time: $now"
-echo "  Total Disk Space: $total_space"
-echo "  Remaining Disk Space: $remaining_space/$total_space ($space_pct)"
-echo "  Disk Usage: [$bar_graph]"
-echo "  Internal IP: $internal_ip"
-echo "  External IP: $external_ip"
+#Print MOTD
+echo "$(tput setaf 2) 
+`date +"%A, %e %B %Y, %r"` 
+`uname -srmo`"
+
+echo ""
+echo ""
+
+
+
+echo "$(tput sgr0) Last login information:"
+echo "---------------------------------------------"
+printf "%-15s | %-15s | %-20s | %-20s\n" "Username" "Terminal" "Date" "IP Address"
+echo "---------------------------------------------"
+last | head -n 1 | awk '{printf "%-15s | %-15s | %-20s | %-20s\n", $1, $2, $4" "$5" "$6, $3}'
+echo "---------------------------------------------"
+
+echo "
+$(tput sgr0)Total Disk Space: $total_space
+$(tput sgr0)Remaining Disk Space: $remaining_space/$total_space ($space_pct)
+$(tput sgr0)Disk Usage: [$bar_graph]
+$(tput sgr0)Internal IP: $internal_ip
+$(tput sgr0)External IP: $external_ip
+"
