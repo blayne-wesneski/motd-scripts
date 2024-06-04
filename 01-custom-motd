@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# Get current date and time
+now=$(date +'%A, %B %d, %Y - %H:%M:%S %Z')
+
+# Get disk usage information
+df_output=$(df -h /)
+total_space=$(echo "$df_output" | awk 'NR==2{print $2}')
+remaining_space=$(echo "$df_output" | awk 'NR==2{print $4}')
+
+# Calculate available space percentage
+space_pct=$(echo "$df_output" | awk 'NR==2{print $5}')
+
+# Define characters for bar graph (adjust as needed)
+full="#"
+empty="-"
+
+# Calculate number of full and empty characters for bar
+full_chars=$(echo "$space_pct" | cut -d "%" -f1)
+empty_chars=$((100 - full_chars))
+
+# Generate bar graph
+bar_graph=""
+for (( i=0; i<$full_chars; i++ )); do
+  bar_graph+="$full"
+done
+for (( i=0; i<$empty_chars; i++ )); do
+  bar_graph+="$empty"
+done
+
+# Get internal and external IP addresses
+internal_ip=$(hostname -I | awk '{print $1}')
+external_ip=$(curl -s https://icanhazip.com)  # Replace with preferred external IP service
+
+# Print MOTD message
+echo "  Last Login: $(last | head -n 1)"
+echo "  Date & Time: $now"
+echo "  Total Disk Space: $total_space"
+echo "  Remaining Disk Space: $remaining_space/$total_space ($space_pct)"
+echo "  Disk Usage: [$bar_graph]"
+echo "  Internal IP: $internal_ip"
+echo "  External IP: $external_ip"
