@@ -33,28 +33,43 @@ done
 
 # Get internal and external IP addresses
 internal_ip=$(hostname -I | awk '{print $1}')
-external_ip=$(curl -s https://icanhazip.com)  # Replace with preferred external IP service
+external_ip=$(curl -s https://icanhazip.com)
+
+#Get Uptime
+let upSeconds="$(/usr/bin/cut -d. -f1 /proc/uptime)"
+let secs=$((${upSeconds}%60))
+let mins=$((${upSeconds}/60%60))
+let hours=$((${upSeconds}/3600%24))
+let days=$((${upSeconds}/86400))
+UPTIME=`printf "%d days, %02dh%02dm%02ds" "$days" "$hours" "$mins" "$secs"`
+
+# get the load averages
+read one five fifteen rest < /proc/loadavg
 
 #Print MOTD
 exec figlet -f smslant "Welcome ${username^} !" | /usr/games/lolcat -f
 echo "$(tput setaf 2) 
 `date +"%A, %e %B %Y, %r"` 
-`uname -srmo`"
-
-echo ""
-echo ""
+`uname -srmo`
+"
 
 echo "$(tput setaf 6)Last login information:"
 echo "---------------------------------------------------------------------------"
 printf "%-15s | %-15s | %-20s | %-20s\n" "Username" "Terminal" "Date" "IP Address"
 echo "---------------------------------------------------------------------------"
-last | head -n 1 | awk '{printf "%-15s | %-15s | %-20s | %-20s\n", $1, $2, $4" "$5" "$6, $3}'
+last | head -n 3 | awk '{printf "%-15s | %-15s | %-20s | %-20s\n", $1, $2, $4" "$5" "$6, $3}'
 echo "---------------------------------------------------------------------------"
 
-echo "
-$(tput setaf 1)Total Disk Space: $total_space
-Remaining Disk Space: $remaining_space/$total_space ($space_pct%)
-Disk Usage: [$bar_graph]
-Internal IP: $internal_ip
-External IP: $external_ip
+echo "$(tput setaf 1)
+- Uptime.........................: ${UPTIME}
+$(tput setaf 2)
+- Total Disk Space...............: $total_space
+- Remaining Disk Space...........: $remaining_space/$total_space ($space_pct%)
+- Disk Usage: [$bar_graph]
+$(tput setaf 4)
+- Memory.........................: `free | grep Mem | awk '{print $3/1024}'` MB (Used) / `cat /proc/meminfo | grep MemTotal | awk {'print $2/1024'}` MB (Total)
+- Load Averages..................: ${one}, ${five}, ${fifteen} (1, 5, 15 min)
+- Running Processes..............: `ps ax | wc -l | tr -d " "`
+$(tput setaf 5)
+- IP Adresses....................: $internal_ip and $external_ip
 "
