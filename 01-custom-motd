@@ -16,23 +16,19 @@ total_space=$(echo "$df_output" | awk 'NR==2{print $2}')
 remaining_space=$(echo "$df_output" | awk 'NR==2{print $4}')
 
 # Calculate available space percentage
-space_pct=$(echo "$df_output" | awk 'NR==2{print $5}')
-
-# Define characters for bar graph (adjust as needed)
-full="#"
-empty="-"
+space_pct=$(echo "$df_output" | awk 'NR==2{print $5}' | cut -d "%" -f1)
 
 # Calculate number of full and empty characters for bar
-full_chars=$(echo "$space_pct" | cut -d "%" -f1)
+full_chars=$((($space_pct * 50 + 50/2) / 100))
 empty_chars=$((50 - full_chars))
 
 # Generate bar graph
 bar_graph=""
-for (( i=0; i<$full_chars / 2; i++ )); do
-  bar_graph+="$full"
+for (( i=0; i<full_chars; i++ )); do
+  bar_graph+="■"  # Assuming "■" represents a full character
 done
-for (( i=0; i<$empty_chars; i++ )); do
-  bar_graph+="$empty"
+for (( i=0; i<empty_chars; i++ )); do
+  bar_graph+="-"  # Adding a space for an empty character
 done
 
 # Get internal and external IP addresses
