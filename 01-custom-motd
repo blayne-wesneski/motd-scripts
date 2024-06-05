@@ -2,6 +2,8 @@
 
 export TERM=xterm-256color
 
+clear
+
 #Get username
 PPID1=`cat /proc/$PPID/status | grep PPid | awk '{ print $2 }'`
 PPID2=`cat /proc/$PPID1/status | grep PPid | awk '{ print $2 }'`
