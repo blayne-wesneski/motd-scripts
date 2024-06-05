@@ -18,7 +18,7 @@ Once the MOTD script(s) are installed and configured, they will be displayed to 
 
 ## Contributing
 
-Contributions are welcome! If you have any improvements or new MOTD scripts to share, feel free to submit a pull request.
+Contributions are welcome! If you have any improvements to my scripts or new MOTD scripts that are applicable to other circumstances, feel free to submit a pull request.
 
 ## License
 
