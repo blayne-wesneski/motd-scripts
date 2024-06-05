@@ -1,5 +1,12 @@
 #!/bin/bash
 
+export TERM=xterm-256color
+
+#Get username
+PPID1=`cat /proc/$PPID/status | grep PPid | awk '{ print $2 }'`
+PPID2=`cat /proc/$PPID1/status | grep PPid | awk '{ print $2 }'`
+username=`ps -x | grep $PPID2 | awk '{ print $6 }' |  sed "s/[[:digit:].-]//g"`
+
 # Get current date and time
 now=$(date +'%A, %B %d, %Y - %H:%M:%S %Z')
 
@@ -33,7 +40,7 @@ internal_ip=$(hostname -I | awk '{print $1}')
 external_ip=$(curl -s https://icanhazip.com)  # Replace with preferred external IP service
 
 #Print MOTD
-figlet -f smslant "Welcome ${USER^} !" | lolcat
+exec figlet -f smslant "Welcome ${username^} !" | /usr/games/lolcat -f
 echo "$(tput setaf 2) 
 `date +"%A, %e %B %Y, %r"` 
 `uname -srmo`"
