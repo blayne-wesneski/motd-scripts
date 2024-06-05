@@ -53,7 +53,7 @@ echo "--------------------------------------------------------------------------
 
 echo "
 $(tput setaf 1)Total Disk Space: $total_space
-Remaining Disk Space: $remaining_space/$total_space ($space_pct)
+Remaining Disk Space: $remaining_space/$total_space ($space_pct%)
 Disk Usage: [$bar_graph]
 Internal IP: $internal_ip
 External IP: $external_ip
