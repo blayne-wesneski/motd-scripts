@@ -17,11 +17,11 @@ empty="-"
 
 # Calculate number of full and empty characters for bar
 full_chars=$(echo "$space_pct" | cut -d "%" -f1)
-empty_chars=$((100 - full_chars))
+empty_chars=$((50 - full_chars))
 
 # Generate bar graph
 bar_graph=""
-for (( i=0; i<$full_chars; i++ )); do
+for (( i=0; i<$full_chars / 2; i++ )); do
   bar_graph+="$full"
 done
 for (( i=0; i<$empty_chars; i++ )); do
@@ -33,6 +33,7 @@ internal_ip=$(hostname -I | awk '{print $1}')
 external_ip=$(curl -s https://icanhazip.com)  # Replace with preferred external IP service
 
 #Print MOTD
+figlet -f smslant "Welcome ${USER^} !" | lolcat
 echo "$(tput setaf 2) 
 `date +"%A, %e %B %Y, %r"` 
 `uname -srmo`"
@@ -40,19 +41,17 @@ echo "$(tput setaf 2)
 echo ""
 echo ""
 
-
-
-echo "$(tput sgr0) Last login information:"
-echo "---------------------------------------------"
+echo "$(tput setaf 6)Last login information:"
+echo "---------------------------------------------------------------------------"
 printf "%-15s | %-15s | %-20s | %-20s\n" "Username" "Terminal" "Date" "IP Address"
-echo "---------------------------------------------"
+echo "---------------------------------------------------------------------------"
 last | head -n 1 | awk '{printf "%-15s | %-15s | %-20s | %-20s\n", $1, $2, $4" "$5" "$6, $3}'
-echo "---------------------------------------------"
+echo "---------------------------------------------------------------------------"
 
 echo "
-$(tput sgr0)Total Disk Space: $total_space
-$(tput sgr0)Remaining Disk Space: $remaining_space/$total_space ($space_pct)
-$(tput sgr0)Disk Usage: [$bar_graph]
-$(tput sgr0)Internal IP: $internal_ip
-$(tput sgr0)External IP: $external_ip
+$(tput setaf 1)Total Disk Space: $total_space
+Remaining Disk Space: $remaining_space/$total_space ($space_pct)
+Disk Usage: [$bar_graph]
+Internal IP: $internal_ip
+External IP: $external_ip
 "
