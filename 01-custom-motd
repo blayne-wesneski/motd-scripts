@@ -74,4 +74,5 @@ $(tput setaf 4)
 - Running Processes..............: `ps ax | wc -l | tr -d " "`
 $(tput setaf 5)
 - IP Adresses....................: $internal_ip and $external_ip
+$(tput setaf 7)
 "
